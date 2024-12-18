@@ -6,7 +6,8 @@
     "volume_threshold": 1000,
     "trade_amount": 0.1,
     "poll_interval": 60,
-    "profit_threshold": 20,  
-    "stop_loss_threshold": 10,  
-    "min_liquidity": 5000  
+    "profit_threshold": 20,
+    "stop_loss_threshold": 10,
+    "min_liquidity": 5000,
+    "buy_threshold": 0.5  
 }

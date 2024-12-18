@@ -51,6 +51,16 @@ def has_sufficient_liquidity(token_data):
         print(f"Error checking liquidity: {e}")
         return False
 
+# Helper: Identify Best Coins
+def is_best_coin(token_data):
+    try:
+        price = token_data.get("price", 0)
+        liquidity = token_data.get("liquidity", {}).get("total", 0)
+        return price < config["buy_threshold"] and liquidity >= config["min_liquidity"]
+    except Exception as e:
+        print(f"Error checking best coin: {e}")
+        return False
+
 # Main: Monitor Dexscreener
 def monitor_dexscreener():
     while True:
@@ -83,11 +93,13 @@ def monitor_dexscreener():
                         send_telegram_message(f"Skipped due to insufficient liquidity: {contract}")
                         continue
 
-                    # Process eligible tokens
-                    send_telegram_message(f"Eligible token found: {token['name']} ({contract})")
+                    # Identify best coins for buying low
+                    if is_best_coin(token):
+                        send_telegram_message(f"Best coin found for buying: {token['name']} ({contract})")
+                        execute_trade(token)
 
-                    # Execute trade via BonkBot
-                    execute_trade(token)
+                    # Monitor price for selling
+                    monitor_trade_profit(token)
             else:
                 print(f"Error fetching data from Dexscreener: {response.status_code}")
         except Exception as e:
@@ -105,8 +117,6 @@ def execute_trade(token):
         response = requests.post(config["bonkbot_api_url"], json=trade_data)
         if response.status_code == 200:
             send_telegram_message(f"Trade executed: {trade_data}")
-
-            # Add logic for profit-taking and stop-loss
             monitor_trade_profit(token)
         else:
             send_telegram_message(f"Trade failed: {trade_data}")
