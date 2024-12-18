@@ -1,0 +1,12 @@
+{
+    "telegram_bot_token": "YOUR_TELEGRAM_BOT_TOKEN",
+    "telegram_chat_id": "YOUR_TELEGRAM_CHAT_ID",
+    "dexscreener_api_url": "https://api.dexscreener.com/tokens",
+    "bonkbot_api_url": "https://api.bonkbot.com/trade",
+    "volume_threshold": 1000,
+    "trade_amount": 0.1,
+    "poll_interval": 60,
+    "profit_threshold": 20,  
+    "stop_loss_threshold": 10,  
+    "min_liquidity": 5000  
+}
